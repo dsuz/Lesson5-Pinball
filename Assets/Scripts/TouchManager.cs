@@ -4,12 +4,26 @@ using UnityEngine;
 
 /// <summary>
 /// タッチ入力を検出して左右のフリッパーを動かす機能を提供する。
-/// 適当な GameObject に追加して使う。
+/// 適当な GameObject に追加して使う。画面内に一つしか存在してはいけない。
 /// </summary>
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] FripperController m_leftFripper;
     [SerializeField] FripperController m_rightFripper;
+
+    private void Start()
+    {
+        // TouchManager が複数存在しないかチェックし、複数ある場合は警告を記録する。
+        TouchManager[] touchManagerList = GameObject.FindObjectsOfType<TouchManager>();
+        if (touchManagerList.Length > 1)
+        {
+            System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            builder.AppendLine("TouchManager should be unique. There's more than one TouchManager in " + gameObject.scene.name);
+            foreach (var touchManager in touchManagerList)
+                builder.AppendLine("Object name: " + touchManager.gameObject.name);
+            Debug.LogWarning(builder.ToString());
+        }
+    }
 
     void Update()
     {
