@@ -7,18 +7,13 @@ public class BallController : MonoBehaviour
     //ボールが見える可能性のあるz軸の最大値
     private float visiblePosZ = -6.5f;
 
-    //ゲームオーバを表示するテキスト
-    private GameObject gameoverText;
-
-    private int m_score;
-
-    /// <summary>スコアを表示するテキスト</summary>
-    [SerializeField] private Text m_scoreText;
+    private GameManager m_gameManager;
 
     void Start()
     {
-        //シーン中のGameOverTextオブジェクトを取得
-        this.gameoverText = GameObject.Find("GameOverText");
+        m_gameManager = GameObject.FindObjectOfType<GameManager>();
+        if (!m_gameManager)
+            Debug.LogWarning("m_gameManager is null for " + gameObject.name + " in " + gameObject.scene.name);
     }
 
     void Update()
@@ -26,8 +21,8 @@ public class BallController : MonoBehaviour
         //ボールが画面外に出た場合
         if (this.transform.position.z < this.visiblePosZ)
         {
-            //GameoverTextにゲームオーバを表示
-            this.gameoverText.GetComponent<Text>().text = "Game Over";
+            m_gameManager.GameOver();
+            Destroy(gameObject);
         }
     }
 
@@ -59,7 +54,6 @@ public class BallController : MonoBehaviour
     /// <param name="score">加算する点数</param>
     private void AddScore(int score)
     {
-        m_score += score;
-        if (m_scoreText) m_scoreText.text = "Score: " + m_score;
+        m_gameManager.AddScore(score);
     }
 }
