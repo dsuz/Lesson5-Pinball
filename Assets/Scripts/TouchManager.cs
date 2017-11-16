@@ -35,7 +35,7 @@ public class TouchManager : MonoBehaviour
         {
             if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
             {
-                if (touch.position.x > Screen.currentResolution.width / 2)
+                if (touch.position.x > Screen.width / 2)
                     isRightTouched = true;
                 else
                     isLeftTouched = true;
