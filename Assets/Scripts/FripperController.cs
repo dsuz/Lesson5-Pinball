@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class FripperController : MonoBehaviour
 {
     //HingiJointコンポーネントを入れる
     private HingeJoint myHingeJoint;
-
     //初期の傾き
     private float defaultAngle = 20;
     //弾いた時の傾き
     private float flickAngle = -20;
+    /// <summary>タッチしている指の ID</summary>
+    int m_fingerId;
 
     // Use this for initialization
     void Start()
@@ -44,6 +44,34 @@ public class FripperController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.RightArrow) && tag == "RightFripperTag")
         {
             SetAngle(this.defaultAngle);
+        }
+
+        // タッチ判定
+        foreach (Touch t in Input.touches)
+        {
+            if (t.phase == TouchPhase.Began)
+            {
+                if (t.position.x > Screen.width / 2)
+                {
+                    if (tag == "RightFripperTag")
+                    {
+                        m_fingerId = t.fingerId;
+                        SetAngle(this.flickAngle);
+                    }
+                }
+                else if (tag == "LeftFripperTag")
+                {
+                    m_fingerId = t.fingerId;
+                    SetAngle(this.flickAngle);
+                }
+            }
+            else if (t.phase == TouchPhase.Ended)
+            {
+                if (t.fingerId == m_fingerId)
+                {
+                    SetAngle(this.defaultAngle);
+                }
+            }
         }
     }
 
