@@ -65,12 +65,9 @@ public class FripperController : MonoBehaviour
                     SetAngle(this.flickAngle);
                 }
             }
-            else if (t.phase == TouchPhase.Ended)
+            else if (t.phase == TouchPhase.Ended && t.fingerId == m_fingerId)
             {
-                if (t.fingerId == m_fingerId)
-                {
-                    SetAngle(this.defaultAngle);
-                }
+                SetAngle(this.defaultAngle);
             }
         }
     }
